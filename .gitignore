@@ -1,0 +1,8 @@
+*.npy
+*.fits
+*.csv
+__pycache__/
+*.tc
+src/.neptune/*
+src/experiments
+*.h5

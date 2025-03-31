@@ -1,0 +1,35 @@
+359.895088 61.29229
+ RAJ2000    DEJ2000      Teff    e_Teff  ...     e_logg     f_logg  AFlag
+   deg        deg         K        K     ... log(cm.s**-2)               
+---------- ---------- --------- -------- ... ------------- -------- -----
+359.895088  61.292290  4785.354  105.404 ...        0.0680 33554432     0
+GAIA_DR3_G 15.818928 0.002782
+GAIA_DR3_BP 16.898954 0.004776
+GAIA_DR3_RP 14.792246 0.003933
+2MASS_H 12.32699966430664 0.03200000151991844
+2MASS_Ks 12.12399959564209 0.020999999716877937
+2MASS_J 13.111000061035156 0.02500000037252903
+PS1_g 17.3065 0.0434
+PS1_r 16.0069 0.0087
+PS1_i 15.2839 0.0071
+PS1_z 14.8436 0.0227
+PS1_y 14.525 0.006
+WISE_RSR_W1 11.942999839782715 0.023000000044703484
+Performing IS
+torch.Size([20480, 5])
+Traceback (most recent call last):
+  File "/home/wesenheit/Files/Astro/ML/Iris-ML/src/evaluate_model.py", line 709, in <module>
+    test_NDE(name,359.895088,61.292290,scale = scale,eta = eta,IS = IS,MCMC = True)
+  File "/home/wesenheit/.local/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/wesenheit/Files/Astro/ML/Iris-ML/src/evaluate_model.py", line 136, in test_NDE
+    log_probs = obj.get_log_prob_full(for_IS)
+  File "/home/wesenheit/.local/lib/python3.10/site-packages/Iris/MC.py", line 762, in get_log_prob_full
+    t0,t1 = self.get_boundaries(g)
+  File "/home/wesenheit/.local/lib/python3.10/site-packages/Iris/MC.py", line 330, in get_boundaries
+    t_min=np.min(logt_arr[is_in])
+  File "/home/wesenheit/.local/lib/python3.10/site-packages/numpy/core/fromnumeric.py", line 2953, in min
+    return _wrapreduction(a, np.minimum, 'min', axis, None, out,
+  File "/home/wesenheit/.local/lib/python3.10/site-packages/numpy/core/fromnumeric.py", line 88, in _wrapreduction
+    return ufunc.reduce(obj, axis, dtype, out, **passkwargs)
+ValueError: zero-size array to reduction operation minimum which has no identity

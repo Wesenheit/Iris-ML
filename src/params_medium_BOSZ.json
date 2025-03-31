@@ -1,0 +1,1 @@
+{"layers": 8, "d_model": 256, "bands": 25, "hidden": 768, "heads": 8, "dropout": 0.05, "name": "medium_BOSZ"}
