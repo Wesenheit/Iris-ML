@@ -1,4 +1,6 @@
 ## Iris-ML
 
-Deep learning model performing the SED estimates based on the arbitrary number of the filters using the combination of the transformer architecture 
-to preprocess the data coupled with the MAF model for the neural density estimation. 
+How to replace MCMC inference for the set-like dataset? Following repository contains my implementation of Set-Invariant transformer + Masked Autoregressive Flow,
+both of which can be used to perform Likelihood-free inference for the set-like datasets.
+Moreover, a science case is presented where the model is applied to infer paramters of stars based on the broadband photmetry.
+
