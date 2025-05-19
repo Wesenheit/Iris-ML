@@ -19,6 +19,7 @@ import h5py
 import scipy
 from scipy.stats import uniform, norm
 from concurrent.futures import ProcessPoolExecutor
+import os
 
 def retry(fun,maxi = 10):
     def inner(*args,**kwargs):
@@ -276,9 +277,9 @@ class BandDataset(Dataset):
         self.th = 0.00
         self.master = {}
         for index in range(N):
-            mags = np.load(self.dir+"batch_{}_X.npy".format(index))
-            parameters = np.load(self.dir+"batch_{}_Y.npy".format(index))
-            what = np.load(self.dir+"batch_{}_bands.npy".format(index))
+            mags = np.load(os.path.join(self.dir,"batch_{}_X.npy".format(index)))
+            parameters = np.load(os.path.join(self.dir,"batch_{}_Y.npy".format(index)))
+            what = np.load(os.path.join(self.dir,"batch_{}_bands.npy".format(index)))
             self.master[index] = (mags,parameters,what)
     def __len__(self):
         return self.len 

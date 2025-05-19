@@ -14,19 +14,19 @@ import json
 import time
 import os
 torch.set_float32_matmul_precision('medium')
-data_dir = "../data/"
 
 def train(args,log = True):
+    data_dir = args.dir
     if log:
         run = neptune.init_run(project='wesenheit/Iris-ML')
 
-    with open(data_dir+"train.json") as f:
+    with open(os.path.join(data_dir,"train.json")) as f:
         data = json.loads(f.read())
 
-    with open(data_dir+"test.json") as f:
+    with open(os.path.join(data_dir,"test.json")) as f:
         data_test = json.loads(f.read())
-    data_set = BandDataset(data_dir+"train/",data["N"])
-    data_set_test = BandDataset(data_dir+"test/",data_test["N"])
+    data_set = BandDataset(os.path.join(data_dir,"train"),data["N"])
+    data_set_test = BandDataset(os.path.join(data_dir,"test"),data_test["N"])
     model = SEDTransformer(data["bands"],args.d_model,args.heads,args.hidden_dim,args.dropout,args.layers)
     param_dict={}
     param_dict["layers"] = args.layers
@@ -49,7 +49,7 @@ def train(args,log = True):
     low = 4
     if args.autocast:
         print("enabled AMP!")
-        scaler = torch.cuda.amp.GradScaler()
+        scaler = torch.amp.GradScaler(device)
     if args.compile:
         print("compiling!")
         train_model = torch.compile(model,backend="inductor")
@@ -64,7 +64,7 @@ def train(args,log = True):
     loss_test_arr_EBV = []
     means = np.zeros(data["bands"])
     squares = np.zeros(data["bands"])
-    for X,Y,bands in tqdm(data_loader,"estimating mean"):
+    for X,Y,bands in tqdm(data_loader,"estimating mean",disable = args.disable):
         X = X - torch.mean(X,axis = -1,keepdim = True)
         for j in range(X.shape[0]):
             bands_temp = bands[j]
@@ -87,7 +87,7 @@ def train(args,log = True):
     for i in range(args.num_epoche):
         epoche_loss = 0
         train_model.train()
-        for X,Y,bands in tqdm(data_loader,"train"):
+        for X,Y,bands in tqdm(data_loader,"train",disable = args.disable):
             X = X.to(device).float()
             Y = Y.to(device).float()
             bands = bands.to(device).float()
@@ -118,7 +118,7 @@ def train(args,log = True):
         epoche_loss_test_T = 0
         epoche_loss_test_EBV = 0
         epoche_loss_test_metal = 0
-        for X,Y,bands in tqdm(data_loader_test,"evaluating"):
+        for X,Y,bands in tqdm(data_loader_test,"evaluating",disable = args.disable):
             X = X.to(device).float()
             Y = Y.to(device).float()
             bands = bands.to(device).float()
@@ -183,5 +183,7 @@ if __name__=="__main__":
     parser.add_argument("-a","--autocast",type=str2bool, nargs='?', const=True, default = True)
     parser.add_argument("-load","--load",type=str2bool, nargs='?', const=True, default = False)
     parser.add_argument("-na","--name",type = str,required = True)
+    parser.add_argument("-dir","--dir",type = str,required = True)
+    parser.add_argument("-dis","--disable",type = int,default = True)
     print(parser.parse_args())
     train(parser.parse_args(),True)

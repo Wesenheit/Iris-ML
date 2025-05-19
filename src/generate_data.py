@@ -4,6 +4,8 @@ from tqdm import tqdm
 import json
 import glob
 import multiprocessing as mp
+import argparse
+import os
 
 def clip(low,high,mu,std,rng):
     while True:
@@ -24,7 +26,7 @@ def generate(num,id,dire,rng,p_core = 0.4,p2 = 0.33):
         mags = np.zeros([batch,how_many])
         for k in range(batch):
             ###BOSZ
-            is_giant = rng.choice(a = 2,p = [1-p_g,p_g])
+            #is_giant = rng.choice(a = 2,p = [1-p_g,p_g])
             g = rng.random()*5.4 + 0.1
             t_min,t_max = generator.get_boundaries(g)
             ###BOSZ
@@ -63,7 +65,7 @@ def generate(num,id,dire,rng,p_core = 0.4,p2 = 0.33):
                 FEH = rng.random()*3 - 2.5
             Z = generator.to_Z(FEH)
             if is_core:
-                AV = clip(0,10,generator.AV_core_mean,generator.AV_std_mean,rng)
+                AV = clip(0,10,generator.AV_core_mean,generator.AV_core_std,rng)
                 #AV = 0.03 + rng.exponential(5)
             else:
                 AV = 0.03 + rng.exponential(generator.AV_exp)
@@ -76,22 +78,34 @@ def generate(num,id,dire,rng,p_core = 0.4,p2 = 0.33):
             parameters[k,3] = AV
             parameters[k,4] = RV
             mags[k,:] = magnitudes
-        np.save(dire+"batch_{}_X".format(id[j]),mags)
-        np.save(dire+"batch_{}_Y".format(id[j]),parameters)
-        np.save(dire+"batch_{}_bands".format(id[j]),what)
+        np.save(os.path.join(dire,"batch_{}_X".format(id[j])),mags)
+        np.save(os.path.join(dire,"batch_{}_Y".format(id[j])),parameters)
+        np.save(os.path.join(dire,"batch_{}_bands".format(id[j])),what)
 
 
 if __name__ == "__main__":
-    data_dir = "../data/"
+    parser = argparse.ArgumentParser(description="Generate data")
+    parser.add_argument(
+        "-M", "--M",
+        type=int,
+        default=1,
+    )
+    parser.add_argument(
+        "-d","--dir",
+        type = str,
+    )
+    args = parser.parse_args()
+    data_dir = os.path.join(args.dir)
 
-    data_dir_train = "../data/train/"
-    data_dir_test = "../data/test/"
+    data_dir_train = os.path.join(args.dir,"train")
+    data_dir_test = os.path.join(args.dir,"test")
+    
     N = 6000
     N_test = 1200
     batch = 256
     how_many = len(Bands_def_all_short)
     generator = PhotometryGenerator(Bands_def_all_short)
-    M = 30
+    M = args.M
     print(generator.lib_stell)
     print(N,N_test,batch)
     rng = np.random.default_rng()
@@ -107,7 +121,7 @@ if __name__ == "__main__":
         p.join()
     means = np.zeros([5])
     squares = np.zeros([5])
-    data = glob.glob(data_dir_train + "batch_*_Y*")
+    data = glob.glob(os.path.join(data_dir_train, "batch_*_Y*"))
     for name in data:
         file = np.load(name)
         means += np.mean(file,axis = 0)/len(data)
@@ -124,7 +138,7 @@ if __name__ == "__main__":
         "type":str(type(generator.lib_stell))
     }
 
-    with open(data_dir+"train.json","w") as f:
+    with open(os.path.join(data_dir,"train.json"),"w") as f:
         f.write(json.dumps(summary_dict))
     print(means,std)
 
@@ -137,14 +151,14 @@ if __name__ == "__main__":
         p.start()
         processes.append(p)
 
-for p in processes:
-    p.join()
+    for p in processes:
+        p.join()
 
-summary_dict_test={
-    "bands":len(generator),
-    "N":N_test,
-    "B":batch,
-    "how_many":how_many
-}
-with open(data_dir+"test.json","w") as f:
-    f.write(json.dumps(summary_dict_test))
+    summary_dict_test={
+        "bands":len(generator),
+        "N":N_test,
+        "B":batch,
+        "how_many":how_many
+    }
+    with open(os.path.join(data_dir,"test.json"),"w") as f:
+        f.write(json.dumps(summary_dict_test))

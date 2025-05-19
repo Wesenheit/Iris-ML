@@ -7,3 +7,5 @@ src/.neptune/*
 src/experiments
 *.h5
 *.json
+*.txt
+*.sl
