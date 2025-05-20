@@ -693,20 +693,20 @@ if __name__=="__main__":
     scale = 1.
     eta = 0.01
     low = 0.01
-    para = True
+    para = False
     name = "medium_BOSZ_Z_mix"
     IS = 32
     name_server = "vizier.cds.unistra.fr"
     how_many = 16
-    #check_apogee(n,iner = True,para = para, name_server = name_server, batch = batch)
-    #check_apogee(n,iner = False,para = para, name_server = name_server, batch = batch)
+    check_apogee(n,iner = True,para = para, name_server = name_server, batch = batch)
+    check_apogee(n,iner = False,para = para, name_server = name_server, batch = batch)
     #check_lamost(n,para = para, AFGK = True)
     #check_lamost(n,para = para, AFGK = False)
     #check_cluster("M5","examples/NGC_5904_M_5.txt",para = para)
 
     #process_cluster(name,"M5","examples/",scale = scale,eta = eta,low = low,IS = IS,how_many = how_many)
     #check_cluster("M5","examples/NGC_5904_M_5.txt",60)
-    evaluate_dataset(name,"APOGEE_disc","examples/",scale = scale,eta = eta,low = low,IS = IS,how_many = how_many)
-    evaluate_dataset(name,"APOGEE_halo","examples/",scale = scale,eta = eta,low = low,IS = IS,how_many = how_many)
+    #evaluate_dataset(name,"APOGEE_disc","examples/",scale = scale,eta = eta,low = low,IS = IS,how_many = how_many)
+    #evaluate_dataset(name,"APOGEE_halo","examples/",scale = scale,eta = eta,low = low,IS = IS,how_many = how_many)
 
     #test_NDE(name,244.196463, 22.013308,scale = scale,eta = eta,IS = IS,MCMC = True)
