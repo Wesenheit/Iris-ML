@@ -26,6 +26,7 @@ import threading
 import concurrent.futures
 from concurrent.futures import ProcessPoolExecutor
 import pystellibs
+import argparse
 
 example_dir = "./examples/"
 
@@ -255,8 +256,16 @@ def evaluate_dataset(name_model,name,directory,B = 256,scale = 1,eta = 0,low = 0
     print("MAD temp: ",MAD_temp,MAD_temp_best)
     print("MAD metal: ",MAD_metal,MAD_metal_best)
     print("MAD logg: ",MAD_logg,MAD_logg_best)
-    RMSE_arr = np.array([RMSE_temp,RMSE_metal,RMSE_logg])
-    return RMSE_arr
+    metrics = {
+        "MAD_temp": MAD_temp,
+        "MAD_logg": MAD_logg,
+        "MAD_metal": MAD_metal,
+        "RMSE_temp": RMSE_temp,
+        "RMSE_logg": RMSE_logg,
+        "RMSE_metal": RMSE_metal,
+    }
+    with open("{}_{}.json".format(name_model,name), "w") as f:
+        json.dump(metrics, f, indent=2)
 
 
 def optimize(names,**kwargs):
@@ -356,19 +365,18 @@ def MAD(X,Y):
     out = out[np.logical_not(np.isnan(out))]
     return np.mean(out)
 
-if __name__=="__main__":
+if __name__ == "__main__":
     torch.manual_seed(42)
+    parser = argparse.ArgumentParser(description='Evaluate the model')
+    parser.add_argument('--name', type=str, help='Name of the model')
+    parser.add_argument("--how_many",type = int,default = 64,help = "How many samples to take")
+    parser.add_argument("--scale",type = float,default = 1.0,help = "Scale of the errors")
+    parser.add_argument("--eta",type = float,default = 0.0,help = "Scale of the errors")
+    parser.add_argument("--low",type = float,default = 0.0,help = "Scale of the errors")
 
-    scale = 1.
-    eta = 0.01
-    low = 0.01
-    para = False
-    name = "medium_BOSZ_Z_mix"
-    IS = 32
-    how_many = 16
-    #process_cluster(name,"M5","examples/",scale = scale,eta = eta,low = low,IS = IS,how_many = how_many)
-    #check_cluster("M5","examples/NGC_5904_M_5.txt",60)
-    evaluate_dataset(name,"APOGEE_disc","examples/",scale = scale,eta = eta,low = low,IS = IS,how_many = how_many)
-    evaluate_dataset(name,"APOGEE_halo","examples/",scale = scale,eta = eta,low = low,IS = IS,how_many = how_many)
+    args = parser.parse_args()
+
+    evaluate_dataset(args.name,"APOGEE_disc","examples/",scale = args.scale,eta = args.eta,low = args.low,IS = False,how_many = args.how_many)
+    evaluate_dataset(args.name,"APOGEE_halo","examples/",scale = args.scale,eta = args.eta,low = args.low,IS = False,how_many = args.how_many)
 
     #test_NDE(name,244.196463, 22.013308,scale = scale,eta = eta,IS = IS,MCMC = True)

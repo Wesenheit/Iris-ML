@@ -1,0 +1,19 @@
+[project]
+name = "Iris-ML"
+version = "0.1.0"
+description = "Spectral Energy Distribution with the Neural Posterior Estimation"
+authors = [{ name = "Mateusz Kapusta", email = "mr.kapusta@student.uw.edu.pl" }]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "scipy",
+    "numpy",
+    "Iris @ git+https://github.com/Wesenheit/Iris@main",
+    "pystellibs @ git+https://github.com/Wesenheit/pystellibs@main",
+    "chainconsumer",
+    "torch",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
