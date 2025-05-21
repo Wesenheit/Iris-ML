@@ -371,8 +371,8 @@ if __name__ == "__main__":
     parser.add_argument('--name', type=str, help='Name of the model')
     parser.add_argument("--how_many",type = int,default = 64,help = "How many samples to take")
     parser.add_argument("--scale",type = float,default = 1.0,help = "Scale of the errors")
-    parser.add_argument("--eta",type = float,default = 0.01,help = "Offset of the errors")
-    parser.add_argument("--low",type = float,default = 0.01,help = "Minimum of the errors")
+    parser.add_argument("--eta",type = float,default = 0.0,help = "Scale of the errors")
+    parser.add_argument("--low",type = float,default = 0.0,help = "Scale of the errors")
 
     args = parser.parse_args()
 
