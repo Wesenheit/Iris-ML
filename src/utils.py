@@ -455,7 +455,7 @@ class DataBundle():
         else:
             columns = self.catalogs[name][0]
             fil = {}
-        v = Vizier(row_limit = -1,columns = columns,column_filters = fil,**kwargs)
+        v = Vizier(row_limit = -1,columns = columns,column_filters = fil,timeout = 86400,**kwargs)
         count = 0
         while count < 10:
             try:
@@ -553,7 +553,7 @@ class DataBundle():
         if self.catalogs == None:
             print("No catalog found!")
             return
-        v = Vizier(row_limit = -1,**kwargs)
+        v = Vizier(row_limit = -1,timeout = 86400,**kwargs)
         if name not in self.unique_remove:
             self.unique_remove[name] = np.ones([len(self.file),]).astype(bool)
         result = v.query_region(coords.SkyCoord(ra = self.file["RA"].values[idx], dec = self.file["DEC"].values[idx],
