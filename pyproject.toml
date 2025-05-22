@@ -9,11 +9,10 @@ dependencies = [
     "scipy",
     "numpy",
     "Iris @ git+https://github.com/Wesenheit/Iris@main",
-    "pystellibs @ git+https://github.com/Wesenheit/pystellibs@main",
+    "pystellibs @ git+https://github.com/Wesenheit/pystellibs@master",
     "chainconsumer",
     "torch",
+    "scikit-learn",
+    "dvclive",
 ]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"

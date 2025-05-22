@@ -20,6 +20,7 @@ from chainconsumer import Chain, Truth,ChainConsumer, PlotConfig,ChainConfig
 from chainconsumer.plotting import plot_contour, plot_truths
 import pystellibs
 import argparse
+from dvclive import Live
 
 example_dir = "./examples/"
 
@@ -249,17 +250,13 @@ def evaluate_dataset(name_model,name,directory,B = 256,scale = 1,eta = 0,low = 0
     print("MAD temp: ",MAD_temp,MAD_temp_best)
     print("MAD metal: ",MAD_metal,MAD_metal_best)
     print("MAD logg: ",MAD_logg,MAD_logg_best)
-    metrics = {
-        "MAD_temp": MAD_temp,
-        "MAD_logg": MAD_logg,
-        "MAD_metal": MAD_metal,
-        "RMSE_temp": RMSE_temp,
-        "RMSE_logg": RMSE_logg,
-        "RMSE_metal": RMSE_metal,
-    }
-    with open("{}_{}.json".format(name_model,name), "w") as f:
-        json.dump(metrics, f, indent=2)
-
+    with Live() as live:
+        live.log_metric("MAD_temp", MAD_temp)
+        live.log_metric("MAD_logg", MAD_logg)
+        live.log_metric("MAD_metal", MAD_metal)
+        live.log_metric("RMSE_temp", RMSE_temp)
+        live.log_metric("RMSE_logg", RMSE_logg)
+        live.log_metric("RMSE_metal", RMSE_metal)
 
 def optimize(names,**kwargs):
     norm = np.array([300,1,1])
