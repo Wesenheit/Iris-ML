@@ -14,5 +14,6 @@ dependencies = [
     "torch",
     "scikit-learn",
     "dvclive",
+    "dvc-gdrive"
 ]
 

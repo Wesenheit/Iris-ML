@@ -167,7 +167,7 @@ def test_NDE(name,ra,dec,scale = 1,eta = 0.0,IS = False,MCMC = False):
     plt.savefig("test_NDE.pdf")
 
 @torch.no_grad()
-def evaluate_dataset(name_model,name,directory,B = 256,scale = 1,eta = 0,low = 0,how_many = 64,IS = False):
+def evaluate_dataset(name_model,name,directory,live,B = 256,scale = 1,eta = 0,low = 0,how_many = 64,IS = False):
     import warnings
     warnings.filterwarnings("ignore", category=RuntimeWarning)
 
@@ -250,13 +250,13 @@ def evaluate_dataset(name_model,name,directory,B = 256,scale = 1,eta = 0,low = 0
     print("MAD temp: ",MAD_temp,MAD_temp_best)
     print("MAD metal: ",MAD_metal,MAD_metal_best)
     print("MAD logg: ",MAD_logg,MAD_logg_best)
-    with Live() as live:
-        live.log_metric("MAD_temp", MAD_temp)
-        live.log_metric("MAD_logg", MAD_logg)
-        live.log_metric("MAD_metal", MAD_metal)
-        live.log_metric("RMSE_temp", RMSE_temp)
-        live.log_metric("RMSE_logg", RMSE_logg)
-        live.log_metric("RMSE_metal", RMSE_metal)
+    name_to_log = name.split("_")[1]
+    live.log_metric("{}/MAD_temp".format(name_to_log), MAD_temp)
+    live.log_metric("{}/MAD_logg".format(name_to_log), MAD_logg)
+    live.log_metric("{}/MAD_metal".format(name_to_log), MAD_metal)
+    live.log_metric("{}/RMSE_temp".format(name_to_log), RMSE_temp)
+    live.log_metric("{}/RMSE_logg".format(name_to_log), RMSE_logg)
+    live.log_metric("{}/RMSE_metal".format(name_to_log), RMSE_metal)
 
 def optimize(names,**kwargs):
     norm = np.array([300,1,1])
@@ -365,8 +365,8 @@ if __name__ == "__main__":
     parser.add_argument("--low",type = float,default = 0.0,help = "Scale of the errors")
 
     args = parser.parse_args()
-
-    evaluate_dataset(args.name,"APOGEE_disc","examples/",scale = args.scale,eta = args.eta,low = args.low,IS = False,how_many = args.how_many)
-    evaluate_dataset(args.name,"APOGEE_halo","examples/",scale = args.scale,eta = args.eta,low = args.low,IS = False,how_many = args.how_many)
+    with Live() as live:
+        evaluate_dataset(args.name,"APOGEE_disc","examples/",live,scale = args.scale,eta = args.eta,low = args.low,IS = False,how_many = args.how_many)
+        evaluate_dataset(args.name,"APOGEE_halo","examples/",live,scale = args.scale,eta = args.eta,low = args.low,IS = False,how_many = args.how_many)
 
     #test_NDE(name,244.196463, 22.013308,scale = scale,eta = eta,IS = IS,MCMC = True)
