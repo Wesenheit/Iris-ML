@@ -9,6 +9,7 @@ src/experiments
 *.json
 *.txt
 *.sl
+*.pdf
 #!src/examples/*.npy
 #!src/examples/*.csv
 .dvc/config
