@@ -1,11 +1,7 @@
-from astropy.io import fits
 import numpy as np
 import pandas as pd
 from astroquery.vizier import Vizier
-import os
-import threading
 import concurrent.futures
-from concurrent.futures import ProcessPoolExecutor
 from utils import PhotometryGenerator,Bands_def_all_short,DataBundle,is_set,M5,retry
 from tqdm import tqdm
 from astropy.table import unique
@@ -346,8 +342,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Download data from VizieR')
     parser.add_argument('-n','--number', type=int, default=400000, help='Number of stars to download')
     parser.add_argument('-b','--batch', type=int, default=20000, help='Batch size for downloading')
-    parser.add_argument('-p','--para', type=int, help='Use parallel processing',default=0)
-    parser.add_argument("-np","--num_p", type=int, default=4, help='Number of processes to use for parallel processing')
+    parser.add_argument('-p','--para', type=int, help='Use parallel processing',default=1)
+    parser.add_argument("-np","--num_p", type=int, default=16, help='Number of processes to use for parallel processing')
     args = parser.parse_args()
     name_server = "vizier.cds.unistra.fr"
     if args.para:

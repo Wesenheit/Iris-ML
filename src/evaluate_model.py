@@ -1,8 +1,6 @@
 import json
-import sys, os
 import numpy as np
 import torch
-from time import sleep
 import pandas as pd
 from models import SEDTransformer,SED_NDE
 from utils import PhotometryGenerator,Bands_def_all_short,DataBundle,is_set,M5,retry
@@ -11,20 +9,15 @@ import matplotlib.pyplot as plt
 from astroquery.vizier import Vizier
 from Iris import Star,Galactic
 from tqdm import tqdm
-from astropy.io import fits
 from sklearn.decomposition import PCA
 import corner
 import emcee
-from astropy.table import unique
 import multiprocessing as mp
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 import scipy
 from chainconsumer import Chain, Truth,ChainConsumer, PlotConfig,ChainConfig
 from chainconsumer.plotting import plot_contour, plot_truths
-import threading
-import concurrent.futures
-from concurrent.futures import ProcessPoolExecutor
 import pystellibs
 import argparse
 
@@ -368,7 +361,7 @@ def MAD(X,Y):
 if __name__ == "__main__":
     torch.manual_seed(42)
     parser = argparse.ArgumentParser(description='Evaluate the model')
-    parser.add_argument('--name', type=str, help='Name of the model')
+    parser.add_argument('--name', type=str, help='Name of the model',required=True)
     parser.add_argument("--how_many",type = int,default = 64,help = "How many samples to take")
     parser.add_argument("--scale",type = float,default = 1.0,help = "Scale of the errors")
     parser.add_argument("--eta",type = float,default = 0.0,help = "Scale of the errors")
