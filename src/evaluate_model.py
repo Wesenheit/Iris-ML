@@ -167,7 +167,7 @@ def test_NDE(name,ra,dec,scale = 1,eta = 0.0,IS = False,MCMC = False):
     plt.savefig("test_NDE.pdf")
 
 @torch.no_grad()
-def evaluate_dataset(name_model,name,directory,live,B = 256,scale = 1,eta = 0,low = 0,how_many = 64,IS = False):
+def evaluate_dataset(name_model,name,directory,to_dump,B = 256,scale = 1,eta = 0,low = 0,how_many = 64,IS = False,CUDA = 1):
     import warnings
     warnings.filterwarnings("ignore", category=RuntimeWarning)
 
@@ -180,7 +180,7 @@ def evaluate_dataset(name_model,name,directory,live,B = 256,scale = 1,eta = 0,lo
         params = json.loads(f.read())
     model = SED_NDE(params["MAF"],params["TF"])
     model.load_state_dict(torch.load("SED_NDE_{}.tc".format(name_model),weights_only = True))
-    dev = "cuda"
+    dev = "cuda" if CUDA else "cpu"
     model.to(dev)
     model.eval()
 
@@ -251,12 +251,12 @@ def evaluate_dataset(name_model,name,directory,live,B = 256,scale = 1,eta = 0,lo
     print("MAD metal: ",MAD_metal,MAD_metal_best)
     print("MAD logg: ",MAD_logg,MAD_logg_best)
     name_to_log = name.split("_")[1]
-    live.log_metric("{}/MAD_temp".format(name_to_log), MAD_temp)
-    live.log_metric("{}/MAD_logg".format(name_to_log), MAD_logg)
-    live.log_metric("{}/MAD_metal".format(name_to_log), MAD_metal)
-    live.log_metric("{}/RMSE_temp".format(name_to_log), RMSE_temp)
-    live.log_metric("{}/RMSE_logg".format(name_to_log), RMSE_logg)
-    live.log_metric("{}/RMSE_metal".format(name_to_log), RMSE_metal)
+    to_dump["{}/MAD_temp".format(name_to_log)] = MAD_temp
+    to_dump["{}/MAD_logg".format(name_to_log)] = MAD_logg
+    to_dump["{}/MAD_metal".format(name_to_log)] = MAD_metal
+    to_dump["{}/RMSE_temp".format(name_to_log)] = RMSE_temp
+    to_dump["{}/RMSE_logg".format(name_to_log)] =  RMSE_logg)
+    to_dump["{}/RMSE_metal".format(name_to_log)] = RMSE_metal
 
 def optimize(names,**kwargs):
     norm = np.array([300,1,1])
@@ -363,10 +363,13 @@ if __name__ == "__main__":
     parser.add_argument("--scale",type = float,default = 1.0,help = "Scale of the errors")
     parser.add_argument("--eta",type = float,default = 0.0,help = "Scale of the errors")
     parser.add_argument("--low",type = float,default = 0.0,help = "Scale of the errors")
+    parser.add_argument("--cuda",type = int, default = 1.0,help = "Use CUDA for inference")
 
     args = parser.parse_args()
-    with Live() as live:
-        evaluate_dataset(args.name,"APOGEE_disc","examples/",live,scale = args.scale,eta = args.eta,low = args.low,IS = False,how_many = args.how_many)
-        evaluate_dataset(args.name,"APOGEE_halo","examples/",live,scale = args.scale,eta = args.eta,low = args.low,IS = False,how_many = args.how_many)
-
-    #test_NDE(name,244.196463, 22.013308,scale = scale,eta = eta,IS = IS,MCMC = True)
+    to_dump = {}
+    evaluate_dataset(args.name,"APOGEE_disc","examples/",to_dump,scale = args.scale,eta = args.eta,
+                    low = args.low,IS = False,how_many = args.how_many,CUDA = args.cuda)
+    evaluate_dataset(args.name,"APOGEE_halo","examples/",to_dump,scale = args.scale,eta = args.eta,
+                    low = args.low,IS = False,how_many = args.how_many,CUDA = args.cuda)
+    with open("{}_metrics.json".format(args.name), "w") as file:
+        json.dump(to_dump,file)
