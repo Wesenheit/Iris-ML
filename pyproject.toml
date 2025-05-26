@@ -13,8 +13,6 @@ dependencies = [
     "chainconsumer",
     "torch",
     "scikit-learn",
-    "dvclive",
-    "dvc-gdrive",
     "neptune"
 ]
 

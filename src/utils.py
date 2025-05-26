@@ -113,7 +113,7 @@ class PhotometryGenerator(Star):
         self.p_pop2 = 0.25
         self.AV_core_mean = 5
         self.AV_core_std = 3
-        self.AV_exp = 1
+        self.AV_exp = 1.5
         self.RV_mean = 3.13
         self.RV_std = 0.18
         self.lib_stell = Bosz(2000,1,interpolator = "ndlinear")

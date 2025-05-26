@@ -31,7 +31,7 @@ def generate(num,id,dire,rng):
             ###BOSZ
             T = rng.random()*(t_max - t_min) + t_min
             is_core = rng.choice(a = 2,p = [1-generator.p_core,generator.p_core])
-            is_pop2 = rng.choice(a = 2,p = [1-generator.p2,generator.p2])
+            is_pop2 = rng.choice(a = 2,p = [1-generator.p_pop2,generator.p_pop2])
             if is_core:
                 Z_m = 0
                 Z_std = 0.2
