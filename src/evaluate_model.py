@@ -255,7 +255,7 @@ def evaluate_dataset(name_model,name,directory,to_dump,B = 256,scale = 1,eta = 0
     to_dump["{}/MAD_logg".format(name_to_log)] = MAD_logg
     to_dump["{}/MAD_metal".format(name_to_log)] = MAD_metal
     to_dump["{}/RMSE_temp".format(name_to_log)] = RMSE_temp
-    to_dump["{}/RMSE_logg".format(name_to_log)] =  RMSE_logg)
+    to_dump["{}/RMSE_logg".format(name_to_log)] =  RMSE_logg
     to_dump["{}/RMSE_metal".format(name_to_log)] = RMSE_metal
 
 def optimize(names,**kwargs):

@@ -109,21 +109,15 @@ class PhotometryGenerator(Star):
         self.bands = bands
         self.filters = bands
 
-        self.p_core = 0.4
+        self.p_core = 0.0
         self.p_pop2 = 0.25
-        self.p_gig = 0.3
         self.AV_core_mean = 5
         self.AV_core_std = 3
         self.AV_exp = 1
         self.RV_mean = 3.13
         self.RV_std = 0.18
-        #self.lib_stell = BTSettl(medres = False)
-        #self.lib_stell = BTSettl(medres = False,interpolator = "ndlinear")
-        #self.lib_stell = Phoenix(interpolator = "ndlinear")
-        #self.lib_stell = Bosz(2000,1)
         self.lib_stell = Bosz(2000,1,interpolator = "ndlinear")
         self.ext = extinction.fitzpatrick99
-        #self.lib_stell = Phoenix()
         for i in self.filters:
             try:
                 f = self.lib_phot[i]
@@ -215,8 +209,7 @@ class PhotometryGenerator(Star):
         log_prob_AV = - self.p_core*(self.AV_core_mean-AV)**2/(2*self.AV_core_std**2) - (1-self.p_core)*(np.log(self.AV_exp) + self.AV_exp*(AV-0.03))
         log_prob_RV = - (self.RV_mean-RV)**2/(2*self.RV_std**2)
         log_prob_MEH = - self.p_core * FEH**2/(2*0.2**2) - (1-self.p_core) * (self.p_pop2 * (-1.49-FEH)**2/(2*0.4**2) + (1-self.p_pop2)*(-0.1-FEH)**2/(2*0.2**2))
-        #log_prob_MEH = - (self.p_pop2 * (-1.49-FEH)**2/(2*0.4**2) + (1-self.p_pop2)*(-0.1-FEH)**2/(2*0.2**2))
-        log_prob_logg = 0# - self.p_gig * (2.5-logg)**2/(2*1**2) - (1-self.p_gig)*(5-logg)**2/(2*0.5**2)
+        log_prob_logg = 0
          
         assert samples.shape[0]==id.shape[0]
         unique = np.unique(id)

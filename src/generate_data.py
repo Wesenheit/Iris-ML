@@ -13,7 +13,7 @@ def clip(low,high,mu,std,rng):
         if point > low and point < high:
             return point
 
-def generate(num,id,dire,rng,p_core = 0.4,p2 = 0.33):
+def generate(num,id,dire,rng):
     """
     dire - where to save
     p_core - probability of beeing in the core
@@ -26,28 +26,25 @@ def generate(num,id,dire,rng,p_core = 0.4,p2 = 0.33):
         mags = np.zeros([batch,how_many])
         for k in range(batch):
             ###BOSZ
-            #is_giant = rng.choice(a = 2,p = [1-p_g,p_g])
             g = rng.random()*5.4 + 0.1
             t_min,t_max = generator.get_boundaries(g)
             ###BOSZ
             T = rng.random()*(t_max - t_min) + t_min
-            is_core = rng.choice(a = 2,p = [1-p_core,p_core])
-            is_pop2 = rng.choice(a = 2,p = [1-p2,p2])
-            """
+            is_core = rng.choice(a = 2,p = [1-generator.p_core,generator.p_core])
+            is_pop2 = rng.choice(a = 2,p = [1-generator.p2,generator.p2])
             if is_core:
                 Z_m = 0
                 Z_std = 0.2
             else:
-            """
-            """
-            taken from the isochrone package
-            """
-            if is_pop2:
-                Z_m = -1.49
-                Z_std = 0.4
-            else:
-                Z_m = -0.1
-                Z_std = 0.2
+                """
+                taken from the isochrone package
+                """
+                if is_pop2:
+                    Z_m = -1.49
+                    Z_std = 0.4
+                else:
+                    Z_m = -0.1
+                    Z_std = 0.2
             if "basel" in str(type(generator.lib_stell)):
                 FEH = rng.random()*4.5-3.5
             elif "kurucz" in str(type(generator.lib_stell)):
@@ -66,11 +63,10 @@ def generate(num,id,dire,rng,p_core = 0.4,p2 = 0.33):
             else:
                 FEH = rng.random()*3 - 2.5
             Z = generator.to_Z(FEH)
-            #if is_core:
-            #    AV = clip(0,1,generator.AV_core_mean,generator.AV_core_std,rng)
-                #AV = 0.03 + rng.exponential(5)
-            #else:
-            AV = 0.003 + rng.exponential(generator.AV_exp)
+            if is_core:
+                AV = clip(0,1,generator.AV_core_mean,generator.AV_core_std,rng)
+            else:
+                AV = 0.003 + rng.exponential(generator.AV_exp)
             RV = clip(2.5,4.5,generator.RV_mean,generator.RV_std,rng)
             #magnitudes = generator.generate_gaia_diff(T,g,Z,AV,RV,what)
             magnitudes = generator.generate_data(T,g,Z,AV,RV,what)

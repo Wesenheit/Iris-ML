@@ -134,7 +134,7 @@ def test_NDE(name,ra,dec,scale = 1,eta = 0.0,IS = False,MCMC = False,cuda = True
         print(np.std(samples_SIR,axis = 0))
     if MCMC:
         print("Performing MCMC")
-        start = np.array([5,2,-0.1,0.2,3.1]).reshape(5,-1)
+        start = np.array([5,2,-1.0,1.0,3.3]).reshape(5,-1)
         start = start + np.random.randn(5,32)*0.01*start
         start = start.T
         sampler = emcee.EnsembleSampler(
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     parser.add_argument("--eta",type = float,default = 0.0,help = "error in quadrature")
     parser.add_argument("--low",type = float,default = 0.0,help = "lower bound of the error")
     parser.add_argument("--cuda",type = int,default = 1,help = "Use cuda")
-    parser.add_argument("--IS",type = int,default = 1,help = "Use importance sampling")
+    parser.add_argument("--IS",type = int,default = 0,help = "Use importance sampling")
     parser.add_argument("--MCMC",type = int,default = 0,help = "Use MCMC")
     args = parser.parse_args()
-    test_NDE(args.name,70.401283,25.035074,scale = args.scale,eta = args.eta,MCMC = args.MCMC,IS = args.IS,cuda = args.cuda)
+    test_NDE(args.name,67.239295,24.602066,scale = args.scale,eta = args.eta,MCMC = args.MCMC,IS = args.IS,cuda = args.cuda)
