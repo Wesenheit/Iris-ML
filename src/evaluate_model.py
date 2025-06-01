@@ -20,7 +20,6 @@ from chainconsumer import Chain, Truth,ChainConsumer, PlotConfig,ChainConfig
 from chainconsumer.plotting import plot_contour, plot_truths
 import pystellibs
 import argparse
-from dvclive import Live
 
 example_dir = "./examples/"
 
