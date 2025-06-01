@@ -35,7 +35,7 @@ def test_NDE(name,ra,dec,scale = 1,eta = 0.0,IS = False,MCMC = False,cuda = True
     with open("SED_NDE_{}.json".format(name),"r") as f:
         final = json.loads(f.read())
     model = SED_NDE(final["MAF"],final["TF"])
-    model.load_state_dict(torch.load("SED_NDE_{}.tc".format(name)))
+    model.load_state_dict(torch.load("SED_NDE_{}.tc".format(name),map_location = "cpu"))
     dev = "cuda" if cuda else "cpu"
     model.to(dev)
     model.eval()
@@ -160,7 +160,7 @@ def test_NDE(name,ra,dec,scale = 1,eta = 0.0,IS = False,MCMC = False,cuda = True
     print("VALUES")
     print(np.mean(samples_numpy,axis = 0))
     print(np.std(samples_numpy,axis = 0))
-    plt.savefig("test_NDE.pdf")
+    plt.savefig("corner_NDE.pdf")
 
 if __name__ == "__main__":
     torch.manual_seed(42)
@@ -168,10 +168,10 @@ if __name__ == "__main__":
     parser.add_argument('--name', type=str, help='Name of the model',required=True)
     parser.add_argument("--how_many",type = int,default = 64,help = "How many samples to take")
     parser.add_argument("--scale",type = float,default = 1.0,help = "Scale of the errors")
-    parser.add_argument("--eta",type = float,default = 0.0,help = "error in quadrature")
-    parser.add_argument("--low",type = float,default = 0.0,help = "lower bound of the error")
+    parser.add_argument("--eta",type = float,default = 0.01,help = "error in quadrature")
+    parser.add_argument("--low",type = float,default = 0.01,help = "lower bound of the error")
     parser.add_argument("--cuda",type = int,default = 1,help = "Use cuda")
-    parser.add_argument("--IS",type = int,default = 0,help = "Use importance sampling")
-    parser.add_argument("--MCMC",type = int,default = 0,help = "Use MCMC")
+    parser.add_argument("--is",type = int,default = 0,help = "Use importance sampling")
+    parser.add_argument("--mcmc",type = int,default = 0,help = "Use MCMC")
     args = parser.parse_args()
-    test_NDE(args.name,67.239295,24.602066,scale = args.scale,eta = args.eta,MCMC = args.MCMC,IS = args.IS,cuda = args.cuda)
+    test_NDE(args.name,67.239295,24.602066,scale = args.scale,eta = args.eta,MCMC = args.mcmc,IS = args.is,cuda = args.cuda)
