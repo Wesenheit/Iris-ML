@@ -173,5 +173,7 @@ if __name__ == "__main__":
     parser.add_argument("--cuda",type = int,default = 1,help = "Use cuda")
     parser.add_argument("--IS",type = int,default = 0,help = "Use importance sampling")
     parser.add_argument("--mcmc",type = int,default = 0,help = "Use MCMC")
+    parser.add_argument("--ra",type = float,required = True)
+    parser.add_argument("--dec",type = float,required = True)
     args = parser.parse_args()
-    test_NDE(args.name,67.239295,24.602066,scale = args.scale,eta = args.eta,MCMC = args.mcmc,IS = args.IS,cuda = args.cuda)
+    test_NDE(args.name,args.ra,args.dec,scale = args.scale,eta = args.eta,MCMC = args.mcmc,IS = args.IS,cuda = args.cuda)
