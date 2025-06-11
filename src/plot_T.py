@@ -8,9 +8,9 @@ print(name)
 a = pd.read_csv(name)
 init = len(a)
 
-id = np.logical_and((a["logg_true"]).values >0,a["DEC"].values > -90)
+id = np.logical_and((a["leng"]).values > 10,a["DEC"].values > -90)
 a = a.iloc[id,:]
-print(len(a)/init)
+print(len(a)/init,len(a))
 x = a["T_50th"]
 y = a["T_true"]
 metal_1 = a["[M/H]_50th"].values
@@ -21,10 +21,11 @@ print(len(x),len(y))
 print("RMSE T: ",np.sqrt(np.mean((x-y)**2)))
 print("MAD T:",np.mean(np.abs(x-y)))
 
-z = np.clip(a["Ak"],0,4)
+#z = np.clip(a["leng"],0,20)
+z = a["leng"].values
 N = 9
 xmin = np.round(np.min(a["T_true"]),-3)
-xmax = np.round(np.max(a["T_true"]),-3)
+xmax = 8000#np.round(np.max(a["T_true"]),-3)
 X = np.linspace(xmin,xmax,100)
 fig = plt.figure(1, figsize=(7,7))
 gs = plt.GridSpec(3,2, height_ratios=[0.05,1,0.2], width_ratios=[1,0.2])
@@ -35,7 +36,7 @@ ax1 = fig.add_subplot(gs[1, 0])# place it where it should be.
 # The plot itself
 plt1 = ax1.scatter(x, y, c = z, 
                    marker = '.', s = 20, edgecolor = 'none',alpha =1,
-                   cmap = 'magma_r', vmin =0 , vmax = np.max(z),rasterized = True)
+                   cmap = 'magma_r', vmin = np.min(z) , vmax = np.max(z),rasterized = True)
 ax1.plot(X,X,color = "black")
 ax1.grid(True)
 ax1.set_xlim(xmin,xmax)
@@ -50,7 +51,7 @@ cbax = fig.add_subplot(gs[0, 0])
 cbax.set_yticklabels([])
 cbax.set_xticklabels([])
 cbax.set_axis_off()
-cb = fig.colorbar(ax = cbax ,mappable = plt1,orientation = 'horizontal', ticklocation = 'top',label=r'$A_k$',fraction = 2)
+cb = fig.colorbar(ax = cbax ,mappable = plt1,orientation = 'horizontal', ticklocation = 'top',label=r'$N$',fraction = 2)
 #cb.ax.xaxis.set_ticks_position('top')
 cb.ax.xaxis.set_label_position('top')
 ax1v = fig.add_subplot(gs[1, 1])
@@ -72,3 +73,10 @@ ax1h.grid(True)
 #plt.tight_layout()
 name_to_save = name.split("/")[-1]
 plt.savefig("T_pred_measured_{}.pdf".format(name_to_save[:-4]))
+
+
+fig,ax = plt.subplots(figsize = (5,5))
+print(np.median(a["AV_50th"].values),np.quantile(a["AV_50th"].values,0.84))
+ax.hist(a["AV_50th"].values,bins =  20)
+plt.savefig("hist_{}.pdf".format(name_to_save[:-4]))
+

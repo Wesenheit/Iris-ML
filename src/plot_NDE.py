@@ -17,8 +17,7 @@ from chainconsumer import Chain, Truth,ChainConsumer, PlotConfig,ChainConfig
 from chainconsumer.plotting import plot_contour, plot_truths
 import pystellibs
 import argparse
-
-example_dir = "./examples/"
+plt.rcParams.update({'font.size': 100})
 
 def get_n_params(model):
     pp = 0
@@ -107,7 +106,7 @@ def test_NDE(name,ra,dec,scale = 1,eta = 0.0,IS = False,MCMC = False,cuda = True
     samples = model.sample(2048*16,bands,mags,errors).squeeze(0)
     samples_numpy = samples.clone().cpu().numpy()
     samples_numpy[:,0] *= 1000
-    data_org = pd.DataFrame(columns = ["T","logg","[M/H]","AV","RV"],data = samples_numpy)
+    data_org = pd.DataFrame(columns = [r"$T$","logg","[M/H]",r"$A_V$",r"$R_V$"],data = samples_numpy)
     c = ChainConsumer()
     chain1 = Chain(samples = data_org,name = "NPE")
     c.add_chain(chain1)
@@ -126,7 +125,7 @@ def test_NDE(name,ra,dec,scale = 1,eta = 0.0,IS = False,MCMC = False,cuda = True
         weights = scipy.special.softmax(log_probs - log_probs_pred)
         idx = np.random.choice(samples_numpy.shape[0], p = weights,size = samples_numpy.shape[0])
         samples_SIR = samples_numpy[idx,:]
-        data_SIR = pd.DataFrame(columns = ["T","logg","[M/H]","AV","RV"],data = samples_SIR)
+        data_SIR = pd.DataFrame(columns = [r"$T$","logg","[M/H]",r"$A_V$",r"$R_V$"],data = samples_SIR)
         chain2 = Chain(samples = data_SIR,name = "NPE + IS",kde = 1.0)
         c.add_chain(chain2)
         print("SIR")
@@ -147,14 +146,14 @@ def test_NDE(name,ra,dec,scale = 1,eta = 0.0,IS = False,MCMC = False,cuda = True
         #samples_MCMC, chi2, pred = obj.run_chain_full(5000,5000,32,logg_range = (0,5.5),Z_range = range_z,RV_range=(1.5,4.5),start = start) 
         #samples_MCMC[:,2] = np.log10(samples_MCMC[:,2])
         samples_MCMC[:,0] *= 1000#10**(samples_MCMC[:,0])
-        data_MCMC = pd.DataFrame(columns = ["T","logg","[M/H]","AV","RV"],data = samples_MCMC)
+        data_MCMC = pd.DataFrame(columns = [r"$T$","logg","[M/H]",r"$A_V$",r"$R_V$"],data = samples_MCMC)
         chain_MCMC = Chain(samples = data_MCMC,name = "MCMC")
         c.add_chain(chain_MCMC)
 
 
     #truth = Truth(location = {"T":true[0],"logg":true[1],"[M/H]":true[2]},line_style=":")
     c.set_override(ChainConfig(shade_alpha=0.1))
-    fig = c.plotter.plot()
+    fig = c.plotter.plot(figsize=(8,8))
     axs = fig.axes
     corner.overplot_lines(fig, true, color="C1")
     print("VALUES")

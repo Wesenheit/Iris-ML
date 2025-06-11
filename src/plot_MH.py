@@ -8,13 +8,13 @@ print(name)
 a = pd.read_csv(name)
 init = len(a)
 
-id = np.logical_and((a["logg_true"]).values >0,a["DEC"].values > -90)
+id = np.logical_and((a["leng"]).values > 0,a["DEC"].values > -90)
 a = a.iloc[id,:]
-print(len(a)/init)
+print(len(a)/init,len(a))
 x = a["[M/H]_50th"]
 y = a["[M/H]_true"]
-print("RMSE T: ",np.sqrt(np.mean((x-y)**2)))
-print("MAD T:",np.mean(np.abs(x-y)))
+print("RMSE MH: ",np.sqrt(np.mean((x-y)**2)))
+print("MAD MH:",np.mean(np.abs(x-y)))
 use_ext = False
 if use_ext:
     z = np.clip(a["Ak"],0,4)
