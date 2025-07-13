@@ -13,7 +13,8 @@ dependencies = [
     "chainconsumer",
     "torch",
     "scikit-learn",
-    "neptune"
+    "neptune",
+    "arviz==0.22.0",
 ]
 
 [tool.ruff]

@@ -4,7 +4,6 @@
 __pycache__/
 *.tc
 src/.neptune/*
-src/experiments
 *.h5
 *.json
 *.txt
@@ -12,6 +11,5 @@ src/experiments
 *.pdf
 #!src/examples/*.npy
 #!src/examples/*.csv
-.dvc/config
 *.ipynb
 src/sed.py
