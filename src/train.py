@@ -195,29 +195,75 @@ def train(args, log=True):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(description="SED transformer")
-    parser.add_argument("-b", "--batch-size", default=10, type=int)
-    parser.add_argument("-n", "--num-epoche", default=500, type=int)
-    parser.add_argument("-lr", "--learning-rate", default=3e-5, type=float)
+    parser = ArgumentParser(description="SED transformer training")
+    parser.add_argument("-b", "--batch-size", default=10, type=int, help="Batch size")
+    parser.add_argument(
+        "-n", "--num-epoche", default=500, type=int, help="number of epochs to train"
+    )
+    parser.add_argument(
+        "-lr",
+        "--learning-rate",
+        default=3e-5,
+        type=float,
+        help="Learning rate, use with cosine annealing",
+    )
     parser.add_argument(
         "-c", "--cuda", type=str2bool, nargs="?", const=True, default=True
     )
-    parser.add_argument("-H", "--heads", default=8, type=int)
-    parser.add_argument("-l", "--layers", default=8, type=int)
-    parser.add_argument("-d", "--d-model", default=256, type=int)
-    parser.add_argument("-hid", "--hidden-dim", default=3 * 256, type=int)
+    parser.add_argument(
+        "-H", "--heads", default=8, type=int, help="number of heads in transformer"
+    )
+    parser.add_argument("-l", "--layers", default=8, type=int, help="number of layers")
+    parser.add_argument(
+        "-d",
+        "--d-model",
+        default=256,
+        type=int,
+        help="dimensionality of the model, equal to the effective token dimension",
+    )
+    parser.add_argument(
+        "-hid",
+        "--hidden-dim",
+        default=3 * 256,
+        type=int,
+        help="hidden number of dimensions in the feed-forward",
+    )
     parser.add_argument("-D", "--dropout", default=0.05, type=float)
     parser.add_argument(
-        "-com", "--compile", type=str2bool, nargs="?", const=True, default=True
+        "-com",
+        "--compile",
+        type=str2bool,
+        nargs="?",
+        const=True,
+        default=True,
+        help="compile model with torch.compile",
     )
     parser.add_argument(
-        "-a", "--autocast", type=str2bool, nargs="?", const=True, default=True
+        "-a",
+        "--autocast",
+        type=str2bool,
+        nargs="?",
+        const=True,
+        default=True,
+        help="use automatic mixed precision (AMP)",
     )
     parser.add_argument(
-        "-load", "--load", type=str2bool, nargs="?", const=True, default=False
+        "-load",
+        "--load",
+        type=str2bool,
+        nargs="?",
+        const=True,
+        default=False,
+        help="Load weights at the beginning (for restarting)",
     )
-    parser.add_argument("-na", "--name", type=str, required=True)
-    parser.add_argument("-dir", "--dir", type=str, required=True)
-    parser.add_argument("-dis", "--disable", type=int, default=True)
+    parser.add_argument(
+        "-na", "--name", type=str, required=True, help="name of the model"
+    )
+    parser.add_argument(
+        "-dir", "--dir", type=str, required=True, help="directory to save"
+    )
+    parser.add_argument(
+        "-dis", "--disable", type=int, default=True, help="disable tqdm"
+    )
     print(parser.parse_args())
     train(parser.parse_args(), True)

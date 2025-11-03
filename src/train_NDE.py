@@ -217,14 +217,30 @@ if __name__ == "__main__":
     parser.add_argument(
         "-n", "--num-epoche", default=500, type=int, help="number of training epoches"
     )
-    parser.add_argument("-lr", "--learning-rate", default=3e-5, type=float)
+    parser.add_argument(
+        "-lr", "--learning-rate", default=3e-5, type=float, help="learning rate"
+    )
     parser.add_argument("-c", "--cuda", default=True, type=bool, help="use CUDA")
     parser.add_argument("-com", "--compile", default=True, type=bool, help="compile")
     parser.add_argument("-X", "--X-dim", default=5, type=int)
     parser.add_argument("-N", "--N", default=10, type=int)
-    parser.add_argument("-H", "--hidden-dims", default=[256, 256])
-    parser.add_argument("-cond", "--cond-dim", default=256, type=int)
-    parser.add_argument("-comp", "--n-comp", default=10, type=int)
+    parser.add_argument(
+        "-H", "--hidden-dims", default=[256, 256], help="hidden dims of the MADE layers"
+    )
+    parser.add_argument(
+        "-cond",
+        "--cond-dim",
+        default=256,
+        type=int,
+        help="size of the conditional input (transformer token size)",
+    )
+    parser.add_argument(
+        "-comp",
+        "--n-comp",
+        default=10,
+        type=int,
+        help="number of components in underlying mixture model",
+    )
     parser.add_argument("-l", "--load", default=False, type=bool)
     parser.add_argument(
         "-nl", "--name-load", type=str, required=True, help="what preprocessor to load"

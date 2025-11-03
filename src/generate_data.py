@@ -84,18 +84,11 @@ def generate(num, id, dire, rng):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generate data")
+    parser = argparse.ArgumentParser(description="Generate data with pystellibs")
     parser.add_argument(
-        "-M",
-        "--M",
-        type=int,
-        default=1,
+        "-M", "--M", type=int, default=1, help="number of processors to generate data"
     )
-    parser.add_argument(
-        "-d",
-        "--dir",
-        type=str,
-    )
+    parser.add_argument("-d", "--dir", type=str, help="directory to store the data")
     args = parser.parse_args()
     data_dir = os.path.join(args.dir)
 

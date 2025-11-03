@@ -1,6 +1,13 @@
 ## Iris-ML
 
-How to replace MCMC inference for the set-like dataset? Following repository contains my implementation of Set-Invariant transformer + Masked Autoregressive Flow,
-both of which can be used to perform Likelihood-free inference for the set-like datasets.
-Moreover, a science case is presented where the model is applied to infer paramters of stars based on the broadband photmetry.
-Some of the results were shown at the ML in PL 2024 conference in the poster form, check [the full poster presentation](https://wesenheit.github.io/posters/Iris_poster.pdf).
+This repository contains code acompanying the [IrisML paper](https://arxiv.org/abs/2510.26964).
+To reproduce the results in the paper:
+
+1. Install [pystellibs](https://github.com/Wesenheit/pystellibs). This version contains more libraries including BOSZ. Weights for the
+library are available upon personal request. One can also train the model including weights supplied with original pystellibs library like BaSeL.
+2. Generate training data with `generate_data.py`.
+3. Pretrain the model with `train.py`.
+4. Train final SDE with `train_NDE.py`.
+5. Use the model! Utilities used to validate the results and produce the plots are in files `download_data.py` and `evaluate_model.py`.
+
+Weights used to produce the paper are available upon request. 
