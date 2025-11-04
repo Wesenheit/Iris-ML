@@ -1,6 +1,6 @@
 ## Iris-ML
 
-![Corner plot](src/corner_NDE.pdf)
+![Corner plot](src/corner_NDE.png)
 
 This repository contains code acompanying the [IrisML paper](https://arxiv.org/abs/2510.26964).
 Presented method allows for fast and accurate estimation of stellar parameters based on the observed
