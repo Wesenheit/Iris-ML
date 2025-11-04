@@ -1,4 +1,4 @@
-## Iris-ML - Neurak Posterior Estimation for Spectral Energy Distribution fitting
+## Iris-ML - Neural Posterior Estimation for the Spectral Energy Distribution fitting
 
 ![Corner plot](src/corner_NDE.png)
 
