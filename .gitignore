@@ -13,3 +13,4 @@ src/.neptune/*
 #!src/examples/*.csv
 *.ipynb
 src/sed.py
+!src/corner_NDE.pdf
