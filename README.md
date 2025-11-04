@@ -1,6 +1,10 @@
 ## Iris-ML
 
+![Corner plot](src/corner_NDE.pdf)
+
 This repository contains code acompanying the [IrisML paper](https://arxiv.org/abs/2510.26964).
+Presented method allows for fast and accurate estimation of stellar parameters based on the observed
+photometric data allone, much faster and as accurate as MCMC! 
 To reproduce the results in the paper:
 
 1. Install [pystellibs](https://github.com/Wesenheit/pystellibs). This version contains more libraries including BOSZ. Weights for the
