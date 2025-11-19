@@ -1,19 +1,20 @@
+import argparse
+import concurrent.futures
+
 import numpy as np
 import pandas as pd
+from astropy.table import unique
 from astroquery.vizier import Vizier
-import concurrent.futures
+from Iris import Galactic
+from tqdm import tqdm
+
 from utils import (
-    PhotometryGenerator,
+    M5,
     Bands_def_all_short,
     DataBundle,
     is_set,
-    M5,
     retry,
 )
-from tqdm import tqdm
-from astropy.table import unique
-from Iris import Star, Galactic
-import argparse
 
 
 def check_apogee(
@@ -81,11 +82,9 @@ def check_apogee(
         for bit in bits:
             if is_set(bit, catalogs["AFlag"][i]):
                 idx[i] = False
-    catalogs = catalogs[idx]  # remove those object that do not have good flags
+    catalogs = catalogs[idx]
 
-    catalogs = unique(
-        catalogs, "GaiaEDR3"
-    )  # remove duplicates from the same GaiaDR3 index
+    catalogs = unique(catalogs, "GaiaEDR3")
     print("len after quality cuts: ", len(catalogs))
     sdss = {
         "V/154/sdss16": [
@@ -509,4 +508,3 @@ if __name__ == "__main__":
         batch=args.batch,
         num_p=args.num_p,
     )
-

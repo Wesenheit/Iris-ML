@@ -1,8 +1,9 @@
+import math
+
+import numpy as np
 import torch
 from torch import nn as nn
 from torch.nn import functional as F
-import numpy as np
-import math
 
 
 class MADE_Layer(nn.Linear):

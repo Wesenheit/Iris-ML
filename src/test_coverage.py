@@ -1,14 +1,16 @@
+import argparse
 import json
+
+import arviz as av
 import numpy as np
 import torch
-from models import SEDTransformer, SED_NDE
+from matplotlib import pyplot as plt
+from tqdm import tqdm
+
+from models import SED_NDE, SEDTransformer
 from utils import (
     DataBundle,
 )
-from tqdm import tqdm
-import argparse
-import arviz as av
-from matplotlib import pyplot as plt
 
 example_dir = "./examples/"
 

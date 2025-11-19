@@ -1,11 +1,13 @@
-import numpy as np
-from utils import PhotometryGenerator, Bands_def_all_short
-from tqdm import tqdm
-import json
-import glob
-import multiprocessing as mp
 import argparse
+import glob
+import json
+import multiprocessing as mp
 import os
+
+import numpy as np
+from tqdm import tqdm
+
+from utils import Bands_def_all_short, PhotometryGenerator
 
 
 def clip(low, high, mu, std, rng):

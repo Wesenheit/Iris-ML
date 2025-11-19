@@ -1,32 +1,23 @@
+import argparse
 import json
+import multiprocessing as mp
+
+import matplotlib.pyplot as plt
 import numpy as np
+import scipy
 import torch
-import pandas as pd
-from models import SEDTransformer, SED_NDE
+from sklearn.decomposition import PCA
+from tqdm import tqdm
+
+from models import SED_NDE, SEDTransformer
 from utils import (
-    PhotometryGenerator,
+    M5,
     Bands_def_all_short,
     DataBundle,
+    PhotometryGenerator,
     is_set,
-    M5,
     retry,
 )
-from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
-from astroquery.vizier import Vizier
-from Iris import Star, Galactic
-from tqdm import tqdm
-from sklearn.decomposition import PCA
-import corner
-import emcee
-import multiprocessing as mp
-from astropy import units as u
-from astropy.coordinates import SkyCoord
-import scipy
-from chainconsumer import Chain, Truth, ChainConsumer, PlotConfig, ChainConfig
-from chainconsumer.plotting import plot_contour, plot_truths
-import pystellibs
-import argparse
 
 example_dir = "./examples/"
 
